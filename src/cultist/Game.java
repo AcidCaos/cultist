@@ -2,10 +2,10 @@ package cultist;
 
 import cultist.display.Display;
 import cultist.gfx.Assets;
+import cultist.gfx.Camera;
 import cultist.input.InputHandler;
-import cultist.states.GameState;
-import cultist.states.State;
-import java.awt.Graphics;
+import cultist.states.GameScreen;
+import cultist.states.Screen;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
@@ -14,10 +14,12 @@ public class Game implements Runnable {
     private static final int IDEAL_FPS = 120;
     private static final int IDEAL_TPS = 32;
     
+    private static int SCALE;
+    private static int INGAME_WIDTH, INGAME_HEIGHT; // in ingame pixels
+    private static int CANVAS_WIDTH, CANVAS_HEIGHT; // in screen pixels
+    
     public String title;
-    private int width, height;
     private Display display;
-    private static final int SCALE = 3;
     
     private boolean running = false;
     private Thread thread;
@@ -25,36 +27,42 @@ public class Game implements Runnable {
     private BufferStrategy bs;
     private Graphics2D g;
     
-    private State gameState;
-    private State menuState;
+    private Screen gameScreen;
+    private Screen menuScreen;
     
     private Handler handler;
     private InputHandler inputHandler;
     
-    public Game(String title, int width, int height) {
-        this.height = height * SCALE;
-        this.width = width * SCALE;
+    private Camera camera;
+    
+    public Game(String title, int ingame_width, int ingame_height, int scale) {
+        this.SCALE = scale;
+        this.INGAME_HEIGHT = ingame_height;
+        this.INGAME_WIDTH = ingame_width;
+        this.CANVAS_HEIGHT =  INGAME_HEIGHT * SCALE;
+        this.CANVAS_WIDTH =  INGAME_WIDTH * SCALE;
         this.title = title;
         inputHandler = new InputHandler();
     }
 
     private void init() {
-        display = new Display(title, width, height);
+        display = new Display(title, CANVAS_WIDTH, CANVAS_HEIGHT);
         display.getFrame().addKeyListener(inputHandler);
         Assets.init();
         
         handler = new Handler(this);
-                
-        gameState = new GameState(handler);
+        camera = new Camera(handler, 0, 0);
+     
+        gameScreen = new GameScreen(handler);
         //menuState = new MenuState(handler);
-        State.setState(gameState);
+        Screen.setState(gameScreen);
     }
     
     private void tick() {
         inputHandler.tick();
         
-        if (State.getState() != null) 
-            State.getState().tick();
+        if (Screen.getState() != null) 
+            Screen.getState().tick();
     }
 
     private void render() {
@@ -65,13 +73,13 @@ public class Game implements Runnable {
         }
         g = (Graphics2D) bs.getDrawGraphics();
         g.scale(SCALE, SCALE);
-        g.setClip(0, 0, width / SCALE, height / SCALE);
+        g.setClip(0, 0, INGAME_WIDTH, INGAME_HEIGHT);
         // Clear screen
-        g.clearRect(0,0, width, height);
+        g.clearRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
         
         // Draw here
-        if (State.getState() != null)
-            State.getState().render(g);
+        if (Screen.getState() != null)
+            Screen.getState().render(g);
         
         g.dispose();
         bs.show();
@@ -136,15 +144,19 @@ public class Game implements Runnable {
     }
     
     public int getWidth() {
-        return width;
+        return INGAME_WIDTH;
     }
 
     public int getHeight() {
-        return height;
+        return INGAME_HEIGHT;
     }
     
     public InputHandler getInputHandler() {
         return inputHandler;
+    }
+    
+    public Camera getCamera() {
+        return camera;
     }
 
 }

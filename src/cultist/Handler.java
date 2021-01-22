@@ -1,8 +1,11 @@
 package cultist;
 
+import cultist.gfx.Camera;
 import cultist.worlds.World;
 
 public class Handler {
+    
+    public boolean DEBUG = false;
     
     private Game game;
     private World world;
@@ -33,5 +36,9 @@ public class Handler {
     
     public void setWorld(World world){
         this.world = world;
+    }
+    
+    public Camera getCamera(){
+        return game.getCamera();
     }
 }

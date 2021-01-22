@@ -5,22 +5,26 @@ import cultist.entities.creatures.Player;
 import cultist.worlds.World;
 import java.awt.Graphics;
 
-public class GameState extends State {
+public class GameScreen extends Screen {
     
     private Player player;
     private World world;
     
-    public GameState(Handler handler){
+    public GameScreen(Handler handler){
         super(handler);
-        world = new World(handler, "res/world/world.txt");
-        handler.setWorld(world);
+        
+        world = new World(handler, "res/maps/map.txt");
         player = new Player(handler, 8, 8);
+        
+        handler.setWorld(world);
+        //handler.getGame().getCamera().move(0, 0);
     }
 
     @Override
     public void tick() {
         world.tick();
         player.tick();
+        handler.getGame().getCamera().centerOnEntity(player);
     }
 
     @Override

@@ -1,19 +1,26 @@
 package cultist.entities;
 
+import cultist.Handler;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public abstract class Entity {
     
-    private float x;
-    private float y;
-    private int width;
-    private int height;
+    protected Handler handler;
+    protected float x;
+    protected float y;
+    protected int width;
+    protected int height;
+    protected Rectangle hitbox;
     
-    public Entity(float x, float y, int width, int height) {
+    public Entity(Handler handler, float x, float y, int width, int height) {
+        this.handler = handler;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        
+        hitbox = new Rectangle(0, 0, width, height);
     }
     
     public abstract void tick();
