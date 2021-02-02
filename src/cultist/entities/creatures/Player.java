@@ -37,7 +37,7 @@ public class Player extends Creature{
         // Move
         getKeyboard();
         move();
-        // handler.getGame().getCamera().centerOnEntity(this);
+        handler.getGame().getCamera().centerOnEntity(this);
     }
     
     public void getKeyboard() {

@@ -19,7 +19,7 @@ public class Assets {
     public static BufferedImage[] player_left;
     public static BufferedImage[] player_right;
     
-    public static BufferedImage grass, rock;
+    public static BufferedImage grass, rock, tree;
 
     public static void init() {
         BufferedImage s = null;
@@ -43,6 +43,7 @@ public class Assets {
         
         grass = sheet.crop(0,4, 1,1);
         rock = sheet.crop(1,4, 1,1);
+        tree = sheet.crop(0, 14, 1, 2);
         
     }
 }

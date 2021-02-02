@@ -1,6 +1,9 @@
 package cultist.worlds;
 
 import cultist.Handler;
+import cultist.entities.EntityManager;
+import cultist.entities.creatures.Player;
+import cultist.entities.statics.Tree;
 import cultist.tiles.Tile;
 import cultist.utils.Utils;
 import java.awt.Graphics;
@@ -12,13 +15,23 @@ public class World {
     private int spawnX, spawnY;
     private int[][] tile_ids;
     
+    // Entities
+    private EntityManager entityManager;
+    
     public World(Handler handler, String path) {
         this.handler = handler;
+        entityManager = new EntityManager(handler, new Player(handler, 0, 0));
+        entityManager.addEntity(new Tree(handler, 32, 16));
+        
         loadWorld(path);
+        
+        entityManager.getPlayer().setX(spawnX);
+        entityManager.getPlayer().setY(spawnY);
+        
     }
     
     public void tick() {
-        
+        entityManager.tick();
     }
     
     public void render(Graphics g) {
@@ -31,6 +44,8 @@ public class World {
             for (int x = x_start; x < x_end; x++) {
                 getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - handler.getCamera().getxOffset()), (int) (y * Tile.TILEHEIGHT - handler.getCamera().getyOffset()));
             }
+        
+        entityManager.render(g);
     }
     
     public Tile getTile(int x, int y) {
