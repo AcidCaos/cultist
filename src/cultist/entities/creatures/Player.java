@@ -57,13 +57,7 @@ public class Player extends Creature{
                 (int) (y - handler.getCamera().getyOffset()),
                 getWidth(), getHeight(), null);
         
-        if (handler.DEBUG) {
-            g.setColor(Color.red);
-            g.drawRect((int) (x + hitbox.x - handler.getCamera().getxOffset()),
-                    (int) (y + hitbox.y - handler.getCamera().getyOffset()),
-                    (int) (hitbox.width),
-                    (int) (hitbox.height));
-        }
+        if (handler.DEBUG) renderHitbox(g);
     }
     
     private BufferedImage getCurrentAnimationFrame(){

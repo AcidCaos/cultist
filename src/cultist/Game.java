@@ -3,6 +3,7 @@ package cultist;
 import cultist.display.Display;
 import cultist.gfx.Assets;
 import cultist.gfx.Camera;
+import cultist.gfx.Font;
 import cultist.input.InputHandler;
 import cultist.states.GameScreen;
 import cultist.states.HomeScreen;
@@ -14,6 +15,7 @@ public class Game implements Runnable {
     
     private static final int IDEAL_FPS = 120;
     private static final int IDEAL_TPS = 32;
+    private int fps = 0, tps = 0;
     
     private static int SCALE;
     private static int INGAME_WIDTH, INGAME_HEIGHT; // in ingame pixels
@@ -43,17 +45,20 @@ public class Game implements Runnable {
         this.CANVAS_HEIGHT =  INGAME_HEIGHT * SCALE;
         this.CANVAS_WIDTH =  INGAME_WIDTH * SCALE;
         this.title = title;
-        inputHandler = new InputHandler();
+        
     }
 
     private void init() {
+        handler = new Handler(this);
+        inputHandler = new InputHandler(handler);
+        
         display = new Display(title, CANVAS_WIDTH, CANVAS_HEIGHT);
         display.getFrame().addKeyListener(inputHandler);
+        display.getCanvas().addKeyListener(inputHandler);
         Assets.init();
         
-        handler = new Handler(this);
         camera = new Camera(handler, 0, 0);
-     
+        
         homeScreen = new HomeScreen(handler);
         gameScreen = new GameScreen(handler);
         Screen.setScreen(homeScreen);
@@ -76,14 +81,23 @@ public class Game implements Runnable {
         g.scale(SCALE, SCALE);
         g.setClip(0, 0, INGAME_WIDTH, INGAME_HEIGHT);
         // Clear screen
-        //g.clearRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
+        //g.fillRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
         g.clearRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
         // Draw here
         if (Screen.getScreen() != null)
             Screen.getScreen().render(g);
-        
+        // Debug info
+        if (handler.DEBUG) renderDebugInfo(g);
         g.dispose();
         bs.show();
+    }
+    
+    private void renderDebugInfo(Graphics2D g) {
+        Font.render(g, "fps: " + fps + " tps: " + tps, 0, 0, false);
+        int playerX = (int) handler.getWorld().getEntityManager().getPlayer().getX();
+        int playerY = (int) handler.getWorld().getEntityManager().getPlayer().getY();
+        Font.render(g, playerX + "," + playerY, 0, INGAME_HEIGHT - 8, false);
+        Font.render(g, "close: F4", INGAME_WIDTH - 9*8, INGAME_HEIGHT - 8, false);
     }
 
     @Override
@@ -121,7 +135,9 @@ public class Game implements Runnable {
             
             if (System.currentTimeMillis() - lastTimerMs > 1000) {
                 lastTimerMs += 1000;
-                System.out.println(ticks + " ticks, " + frames + " fps, " + ms_sleep_time + " ms sleep");
+                fps = frames;
+                tps = ticks;
+                System.out.println(tps + " ticks, " + fps + " fps, " + ms_sleep_time + " ms sleep");
                 if (frames > IDEAL_FPS) ms_sleep_time ++;
                 else if (frames < IDEAL_FPS*0.9) ms_sleep_time --;
                 frames = 0;

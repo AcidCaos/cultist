@@ -24,6 +24,7 @@ public class Tree extends StaticEntity{
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.tree, (int) (x - handler.getCamera().getxOffset()), (int) (y - handler.getCamera().getyOffset()), width, height, null);
+        if (handler.DEBUG) renderHitbox(g);
     }
     
 }

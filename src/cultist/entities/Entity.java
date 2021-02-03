@@ -1,6 +1,7 @@
 package cultist.entities;
 
 import cultist.Handler;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -26,6 +27,14 @@ public abstract class Entity {
     public abstract void tick();
     
     public abstract void render(Graphics g);
+    
+    protected void renderHitbox(Graphics g) {
+            g.setColor(Color.red);
+            g.drawRect((int) (x + hitbox.x - handler.getCamera().getxOffset()),
+                    (int) (y + hitbox.y - handler.getCamera().getyOffset()),
+                    (int) (hitbox.width),
+                    (int) (hitbox.height));
+    }
 
     public boolean checkEntityCollisions(float xOffset, float yOffset){
         for (Entity e : handler.getWorld().getEntityManager().getEntities()) {
