@@ -5,6 +5,7 @@ import cultist.gfx.Assets;
 import cultist.gfx.Camera;
 import cultist.input.InputHandler;
 import cultist.states.GameScreen;
+import cultist.states.HomeScreen;
 import cultist.states.Screen;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -27,8 +28,8 @@ public class Game implements Runnable {
     private BufferStrategy bs;
     private Graphics2D g;
     
-    private Screen gameScreen;
-    private Screen menuScreen;
+    public Screen gameScreen;
+    public Screen homeScreen;
     
     private Handler handler;
     private InputHandler inputHandler;
@@ -53,16 +54,16 @@ public class Game implements Runnable {
         handler = new Handler(this);
         camera = new Camera(handler, 0, 0);
      
+        homeScreen = new HomeScreen(handler);
         gameScreen = new GameScreen(handler);
-        //menuState = new MenuState(handler);
-        Screen.setState(gameScreen);
+        Screen.setScreen(homeScreen);
     }
     
     private void tick() {
         inputHandler.tick();
         
-        if (Screen.getState() != null) 
-            Screen.getState().tick();
+        if (Screen.getScreen() != null) 
+            Screen.getScreen().tick();
     }
 
     private void render() {
@@ -75,11 +76,11 @@ public class Game implements Runnable {
         g.scale(SCALE, SCALE);
         g.setClip(0, 0, INGAME_WIDTH, INGAME_HEIGHT);
         // Clear screen
+        //g.clearRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
         g.clearRect(0,0, INGAME_WIDTH, INGAME_HEIGHT);
-        
         // Draw here
-        if (Screen.getState() != null)
-            Screen.getState().render(g);
+        if (Screen.getScreen() != null)
+            Screen.getScreen().render(g);
         
         g.dispose();
         bs.show();

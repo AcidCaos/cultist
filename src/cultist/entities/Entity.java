@@ -27,6 +27,19 @@ public abstract class Entity {
     
     public abstract void render(Graphics g);
 
+    public boolean checkEntityCollisions(float xOffset, float yOffset){
+        for (Entity e : handler.getWorld().getEntityManager().getEntities()) {
+            if(e.equals(this)) continue;
+            if(e.getHitbox(0f, 0f).intersects(this.getHitbox(xOffset, yOffset)))
+                return true;
+        }
+        return false; // No collision
+    }
+    
+    public Rectangle getHitbox(float xOffset, float yOffset){
+        return new Rectangle((int)(x + xOffset + hitbox.x),(int)(y + yOffset + hitbox.y), hitbox.width, hitbox.height);
+    }
+    
     public float getX() {
         return x;
     }

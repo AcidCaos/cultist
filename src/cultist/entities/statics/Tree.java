@@ -9,6 +9,11 @@ public class Tree extends StaticEntity{
 
     public Tree(Handler handler, float x, float y) {
         super(handler, x, y, Tile.TILEWIDTH, Tile.TILEHEIGHT * 2);
+        
+        hitbox.x = 2;
+        hitbox.y = 5;
+        hitbox.width = 4;
+        hitbox.height = 4;
     }
     
     @Override

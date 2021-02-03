@@ -6,14 +6,14 @@ import java.awt.Graphics;
 public abstract class Screen {
     
     // Static
-    private static Screen currentState = null;
+    private static Screen currentScreen = null;
     
-    public static void setState(Screen state) {
-        currentState = state;
+    public static void setScreen(Screen state) {
+        currentScreen = state;
     }
     
-    public static Screen getState() {
-        return currentState;
+    public static Screen getScreen() {
+        return currentScreen;
     }
     
     // Class

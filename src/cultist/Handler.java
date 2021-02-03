@@ -1,6 +1,7 @@
 package cultist;
 
 import cultist.gfx.Camera;
+import cultist.input.InputHandler;
 import cultist.worlds.World;
 
 public class Handler {
@@ -40,5 +41,9 @@ public class Handler {
     
     public Camera getCamera(){
         return game.getCamera();
+    }
+    
+    public InputHandler getInputHandler() {
+        return game.getInputHandler();
     }
 }

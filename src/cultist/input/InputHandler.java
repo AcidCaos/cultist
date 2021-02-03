@@ -8,6 +8,8 @@ public class InputHandler implements KeyListener {
     private boolean[] keys;
     public boolean up, down, left, right; // , attack, interact, menu;
     
+    public boolean any_key;
+    
     public InputHandler() {
         keys = new boolean[256];
     }
@@ -21,11 +23,13 @@ public class InputHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent k) {
+        any_key = true;
         keys[k.getKeyCode()] = true;
     }
 
     @Override
     public void keyReleased(KeyEvent k) {
+        any_key = false;
         keys[k.getKeyCode()] = false;
     }
     

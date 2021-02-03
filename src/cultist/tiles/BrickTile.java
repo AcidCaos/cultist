@@ -2,10 +2,10 @@ package cultist.tiles;
 
 import cultist.gfx.Assets;
 
-public class RockTile extends Tile{
+public class BrickTile extends Tile{
     
-    public RockTile(int id) {
-        super(Assets.rock, id);
+    public BrickTile(int id) {
+        super(Assets.bricks, id);
     }
     
     public boolean isSolid() {

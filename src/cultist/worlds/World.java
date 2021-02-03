@@ -3,6 +3,7 @@ package cultist.worlds;
 import cultist.Handler;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
+import cultist.entities.statics.Rock;
 import cultist.entities.statics.Tree;
 import cultist.tiles.Tile;
 import cultist.utils.Utils;
@@ -21,7 +22,10 @@ public class World {
     public World(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
-        entityManager.addEntity(new Tree(handler, 32, 16));
+        
+        // Temporary entity adds -> Should go to loadWorld()
+        entityManager.addEntity(new Tree(handler, 8*4, 8*2));
+        entityManager.addEntity(new Rock(handler, 8*3, 8*5));
         
         loadWorld(path);
         
@@ -89,5 +93,8 @@ public class World {
         this.height = height;
     }
     
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
     
 }
