@@ -23,14 +23,24 @@ public class InputHandler implements KeyListener {
     }
     
     public void tick() {
+        
+        // MOVE
+        
         up = keys[KeyEvent.VK_W];
         down = keys[KeyEvent.VK_S];
         left = keys[KeyEvent.VK_A];
         right = keys[KeyEvent.VK_D];
         
+        // ENTITY ACTIONS
+        
         interact = keys[KeyEvent.VK_E] || keys[KeyEvent.VK_SPACE];
         attack = keys[KeyEvent.VK_Q] || keys[KeyEvent.VK_ENTER];
+        
+        // GAME CONTROL
+        
         escape = keys[KeyEvent.VK_ESCAPE];
+        
+        // DEBUG MODE
         
         if (keys[KeyEvent.VK_F3]) {System.out.println("DEBUG ON"); handler.DEBUG = true;}
         if (keys[KeyEvent.VK_F4]) {System.out.println("DEBUG OFF"); handler.DEBUG = false;}

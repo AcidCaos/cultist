@@ -6,18 +6,22 @@ import cultist.tiles.Tile;
 
 public abstract class Creature extends Entity{
     
-    public static final int DEFAULT_HEALTH = 10;
+    
     public static final float DEFAULT_SPEED = 2.0f;
     public static final int DEFAULT_WIDTH = 8;
     public static final int DEFAULT_HEIGHT = 8;
     
-    protected int health;
+    // Movement
     protected float speed;
     protected float xMove, yMove;
     
+    // Attack
+    private int attackRange = 8;
+    private int strength = 3;
+    
     public Creature(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
-        health = DEFAULT_HEALTH;
+        
         speed = DEFAULT_SPEED;
         xMove = 0;
         yMove = 0;
@@ -74,15 +78,6 @@ public abstract class Creature extends Entity{
         return handler.getWorld().getTile(x, y).isSolid();
     }
     
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
     public float getSpeed() {
         return speed;
     }
@@ -90,5 +85,23 @@ public abstract class Creature extends Entity{
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public int getAttackRange() {
+        return attackRange;
+    }
+
+    public void setAttackRange(int attackRange) {
+        this.attackRange = attackRange;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+    
+    
     
 }

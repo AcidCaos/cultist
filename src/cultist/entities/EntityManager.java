@@ -30,7 +30,9 @@ public class EntityManager {
     
     public void tick() {
         for(int i = 0; i < entities.size(); i++){
-            entities.get(i).tick();
+            Entity e = entities.get(i);            
+            e.tick();
+            if (!e.exists()) entities.remove(e); // It died
         }
         entities.sort(renderZBuffer);
     }

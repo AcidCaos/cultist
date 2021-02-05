@@ -1,6 +1,8 @@
 package cultist;
 
 import cultist.display.Display;
+import cultist.entities.Entity;
+import cultist.entities.creatures.Player;
 import cultist.gfx.Assets;
 import cultist.gfx.Camera;
 import cultist.gfx.Font;
@@ -93,11 +95,31 @@ public class Game implements Runnable {
     }
     
     private void renderDebugInfo(Graphics2D g) {
-        Font.render(g, "fps: " + fps + " tps: " + tps, 0, 0, false);
-        int playerX = (int) handler.getWorld().getEntityManager().getPlayer().getX();
-        int playerY = (int) handler.getWorld().getEntityManager().getPlayer().getY();
-        Font.render(g, playerX + "," + playerY, 0, INGAME_HEIGHT - 8, false);
-        Font.render(g, "close: F4", INGAME_WIDTH - 9*8, INGAME_HEIGHT - 8, false);
+        
+        // Entities
+        for (Entity e : handler.getWorld().getEntityManager().getEntities()) {
+            e.renderHitbox(g);
+            e.renderEntityInfo(g);
+            
+        }
+        
+        // Screen info
+        Player player = handler.getWorld().getEntityManager().getPlayer();
+        int playerCenterX = (int) player.getX() + (int) player.getWidth() / 2;
+        int playerCenterY = (int) player.getY() + (int) player.getHeight() / 2;
+        String playerPos = playerCenterX + "," + playerCenterY + " - (" + playerCenterX/8 + "," + playerCenterY/8 + ")";
+        int health = (int) player.getHealth();
+        int speed = (int) player.getSpeed();
+        int strength = (int) player.getStrength();
+        int attackRange = (int) player.getAttackRange();
+        
+        Font.render(g, "fps: " + fps + " tps: " + tps + " - show/hide debug: F3/F4", 0, 0, 2, false);
+        Font.render(g, playerPos, 0, 1*4, 2, false);
+        
+        Font.render(g, "health: " + health, 0, INGAME_HEIGHT - 3*4, 2, false);
+        Font.render(g, "speed: " + speed, 0, INGAME_HEIGHT - 2*4, 2, false);
+        Font.render(g, "attack: " + strength + "(r2: " + attackRange + ")", 0, INGAME_HEIGHT - 1*4, 2, false);
+        
     }
 
     @Override
