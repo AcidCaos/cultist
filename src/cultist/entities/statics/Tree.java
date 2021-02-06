@@ -2,6 +2,7 @@ package cultist.entities.statics;
 
 import cultist.Handler;
 import cultist.gfx.Assets;
+import cultist.items.Item;
 import cultist.tiles.Tile;
 import java.awt.Graphics;
 
@@ -33,7 +34,7 @@ public class Tree extends StaticEntity{
 
     @Override
     public void die() {
-        
+        handler.getWorld().getItemManager().addItem(Item.yellowBook.createNew((int)x, (int)y));
     }
     
 }

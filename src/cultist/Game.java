@@ -7,6 +7,7 @@ import cultist.gfx.Assets;
 import cultist.gfx.Camera;
 import cultist.gfx.Font;
 import cultist.input.InputHandler;
+import cultist.states.EscapeScreen;
 import cultist.states.GameScreen;
 import cultist.states.HomeScreen;
 import cultist.states.Screen;
@@ -15,7 +16,7 @@ import java.awt.image.BufferStrategy;
 
 public class Game implements Runnable {
     
-    private static final int IDEAL_FPS = 120;
+    private static final int IDEAL_FPS = 60; //120;
     private static final int IDEAL_TPS = 32;
     private int fps = 0, tps = 0;
     
@@ -34,6 +35,7 @@ public class Game implements Runnable {
     
     public Screen gameScreen;
     public Screen homeScreen;
+    public Screen escapeScreen;
     
     private Handler handler;
     private InputHandler inputHandler;
@@ -63,6 +65,7 @@ public class Game implements Runnable {
         
         homeScreen = new HomeScreen(handler);
         gameScreen = new GameScreen(handler);
+        escapeScreen = new EscapeScreen(handler);
         Screen.setScreen(homeScreen);
     }
     
@@ -88,38 +91,8 @@ public class Game implements Runnable {
         // Draw here
         if (Screen.getScreen() != null)
             Screen.getScreen().render(g);
-        // Debug info
-        if (handler.DEBUG) renderDebugInfo(g);
         g.dispose();
         bs.show();
-    }
-    
-    private void renderDebugInfo(Graphics2D g) {
-        
-        // Entities
-        for (Entity e : handler.getWorld().getEntityManager().getEntities()) {
-            e.renderHitbox(g);
-            e.renderEntityInfo(g);
-            
-        }
-        
-        // Screen info
-        Player player = handler.getWorld().getEntityManager().getPlayer();
-        int playerCenterX = (int) player.getX() + (int) player.getWidth() / 2;
-        int playerCenterY = (int) player.getY() + (int) player.getHeight() / 2;
-        String playerPos = playerCenterX + "," + playerCenterY + " - (" + playerCenterX/8 + "," + playerCenterY/8 + ")";
-        int health = (int) player.getHealth();
-        int speed = (int) player.getSpeed();
-        int strength = (int) player.getStrength();
-        int attackRange = (int) player.getAttackRange();
-        
-        Font.render(g, "fps: " + fps + " tps: " + tps + " - show/hide debug: F3/F4", 0, 0, 2, false);
-        Font.render(g, playerPos, 0, 1*4, 2, false);
-        
-        Font.render(g, "health: " + health, 0, INGAME_HEIGHT - 3*4, 2, false);
-        Font.render(g, "speed: " + speed, 0, INGAME_HEIGHT - 2*4, 2, false);
-        Font.render(g, "attack: " + strength + "(r2: " + attackRange + ")", 0, INGAME_HEIGHT - 1*4, 2, false);
-        
     }
 
     @Override
@@ -151,7 +124,7 @@ public class Game implements Runnable {
             
             try {
                 Thread.sleep(ms_sleep_time);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             
@@ -161,7 +134,7 @@ public class Game implements Runnable {
                 tps = ticks;
                 System.out.println(tps + " ticks, " + fps + " fps, " + ms_sleep_time + " ms sleep");
                 if (frames > IDEAL_FPS) ms_sleep_time ++;
-                else if (frames < IDEAL_FPS*0.9) ms_sleep_time --;
+                else if (frames < IDEAL_FPS*0.9 && ms_sleep_time > 1 ) ms_sleep_time --;
                 frames = 0;
                 ticks = 0;
             }
@@ -197,5 +170,15 @@ public class Game implements Runnable {
     public Camera getCamera() {
         return camera;
     }
+
+    public int getFPS() {
+        return fps;
+    }
+
+    public int getTPS() {
+        return tps;
+    }
+    
+    
 
 }

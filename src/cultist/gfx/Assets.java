@@ -29,6 +29,10 @@ public class Assets {
     // Entities
     
     public static BufferedImage rock, tree;
+    
+    // Items
+    
+    public static BufferedImage yellow_book;
 
     public static void init() {
         BufferedImage s = null;
@@ -62,6 +66,10 @@ public class Assets {
         
         rock = sheet.crop(0,16, 1,1);
         tree = sheet.crop(0, 14, 1, 2);
+        
+        // Items
+        
+        yellow_book = sheet.crop(0, 9, 1,1);
         
     }
 }

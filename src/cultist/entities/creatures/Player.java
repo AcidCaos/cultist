@@ -4,8 +4,8 @@ import cultist.Handler;
 import cultist.entities.Entity;
 import cultist.gfx.Animation;
 import cultist.gfx.Assets;
+import cultist.inventory.Inventory;
 import cultist.states.Screen;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -20,6 +20,9 @@ public class Player extends Creature{
     private long lastAttack;
     private long attackTimer = attackCooldown;
     
+    // Inventory
+    Inventory inventory;
+    
     public Player(Handler handler, int x, int y) {
         super(handler, x, y, Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT);
         
@@ -32,6 +35,8 @@ public class Player extends Creature{
         upAnim = new Animation(500, Assets.player_up);
         leftAnim = new Animation(500, Assets.player_left);
         rightAnim = new Animation(500, Assets.player_right);
+        
+        inventory = new Inventory(handler);
     }
     
     @Override
@@ -51,6 +56,9 @@ public class Player extends Creature{
         getKeyboardAttack();
         
         // Interact
+        
+        // Inventory
+        inventory.tick();
     }
     
     public void getKeyboardAttack() {
@@ -114,6 +122,7 @@ public class Player extends Creature{
                 (int) (x - handler.getCamera().getxOffset()),
                 (int) (y - handler.getCamera().getyOffset()),
                 getWidth(), getHeight(), null);
+        inventory.render(g);
     }
     
     @Override
@@ -138,6 +147,10 @@ public class Player extends Creature{
     public void die() {
         System.out.println("player died");
         Screen.setScreen(handler.getGame().homeScreen);
+    }
+    
+    public Inventory getInventory() {
+        return inventory;
     }
     
 }

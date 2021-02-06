@@ -8,21 +8,36 @@ public class InputHandler implements KeyListener {
     
     private Handler handler;
     
-    private boolean[] keys;
+    private boolean[] keys, justPressed, cantPress;
     
     public boolean any_key;
     
     public boolean up, left, down, right; // WASD
-    public boolean interact; // E or SPACE
+    public boolean inventory; // E
+    public boolean interact; // F or SPACE
     public boolean attack; // Q or ENTER
     public boolean escape; // <esc>
     
     public InputHandler(Handler handler) {
         keys = new boolean[256];
+        justPressed = new boolean[256];
+        cantPress = new boolean[256];
+        
         this.handler = handler;
     }
     
     public void tick() {
+        
+        for (int i = 0; i < justPressed.length; i++){
+            if (cantPress[i] && !keys[i])
+                cantPress[i] = false;
+            else if (justPressed[i]){
+                cantPress[i] = true;
+                justPressed[i] = false;
+            }
+            if (!cantPress[i] && keys[i]) 
+                justPressed[i] = true;
+        }
         
         // MOVE
         
@@ -33,7 +48,8 @@ public class InputHandler implements KeyListener {
         
         // ENTITY ACTIONS
         
-        interact = keys[KeyEvent.VK_E] || keys[KeyEvent.VK_SPACE];
+        inventory = keys[KeyEvent.VK_E];
+        interact = keys[KeyEvent.VK_F] || keys[KeyEvent.VK_SPACE];
         attack = keys[KeyEvent.VK_Q] || keys[KeyEvent.VK_ENTER];
         
         // GAME CONTROL
@@ -42,10 +58,14 @@ public class InputHandler implements KeyListener {
         
         // DEBUG MODE
         
-        if (keys[KeyEvent.VK_F3]) {System.out.println("DEBUG ON"); handler.DEBUG = true;}
-        if (keys[KeyEvent.VK_F4]) {System.out.println("DEBUG OFF"); handler.DEBUG = false;}
+        if (keyJustPressed(KeyEvent.VK_F3)) handler.DEBUG = !handler.DEBUG;
+        
     }
 
+    public boolean keyJustPressed(int k) {
+        return justPressed[k];
+    }
+    
     @Override
     public void keyPressed(KeyEvent k) {
         any_key = true;
@@ -60,4 +80,8 @@ public class InputHandler implements KeyListener {
     
     @Override
     public void keyTyped(KeyEvent k) { }
+    
+    public void setKeyStat (int key, boolean stat) {
+        keys[key] = stat;
+    }
 }

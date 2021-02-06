@@ -1,8 +1,10 @@
 package cultist.states;
 
 import cultist.Handler;
+import cultist.inventory.Inventory;
 import cultist.worlds.World;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class GameScreen extends Screen {
     
@@ -19,7 +21,14 @@ public class GameScreen extends Screen {
 
     @Override
     public void tick() {
+        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE))
+            Screen.setScreen(handler.getGame().escapeScreen);
         world.tick();
+        
+        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_E)){
+            Inventory aux = handler.getWorld().getEntityManager().getPlayer().getInventory();
+            aux.setShown(!aux.getShown());
+        }
     }
 
     @Override

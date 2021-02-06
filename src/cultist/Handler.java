@@ -46,4 +46,12 @@ public class Handler {
     public InputHandler getInputHandler() {
         return game.getInputHandler();
     }
+    
+    public int getFPS() {
+        return game.getFPS();
+    }
+
+    public int getTPS() {
+        return game.getTPS();
+    }
 }

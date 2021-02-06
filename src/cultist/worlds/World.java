@@ -1,10 +1,14 @@
 package cultist.worlds;
 
 import cultist.Handler;
+import cultist.entities.Entity;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
 import cultist.entities.statics.Rock;
 import cultist.entities.statics.Tree;
+import cultist.gfx.Font;
+import cultist.items.Item;
+import cultist.items.ItemManager;
 import cultist.tiles.Tile;
 import cultist.utils.Utils;
 import java.awt.Graphics;
@@ -19,9 +23,13 @@ public class World {
     // Entities
     private EntityManager entityManager;
     
+    // Item
+    private ItemManager itemManager;
+    
     public World(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
+        itemManager = new ItemManager(handler);
         
         // Temporary entity adds -> Should go to loadWorld()
         entityManager.addEntity(new Tree(handler, 8*4, 8*2));
@@ -35,6 +43,7 @@ public class World {
     }
     
     public void tick() {
+        itemManager.tick();
         entityManager.tick();
     }
     
@@ -49,7 +58,47 @@ public class World {
                 getTile(x, y).render(g, (int) (x * Tile.TILEWIDTH - handler.getCamera().getxOffset()), (int) (y * Tile.TILEHEIGHT - handler.getCamera().getyOffset()));
             }
         
+        // Items below entities
+        itemManager.render(g);
+        // Entities
         entityManager.render(g);
+        // Debug info
+        if (handler.DEBUG) renderDebugInfo(g);
+    }
+    
+    private void renderDebugInfo(Graphics g) {
+        
+        // Items
+        for (Item i : getItemManager().getItems()) {
+            i.renderPickBounds(g);
+            i.renderItemInfo(g);
+            
+        }
+        
+        // Entities
+        for (Entity e : getEntityManager().getEntities()) {
+            e.renderHitbox(g);
+            e.renderEntityInfo(g);
+            
+        }
+        
+        // Screen info
+        Player player = handler.getWorld().getEntityManager().getPlayer();
+        int playerCenterX = (int) player.getX() + (int) player.getWidth() / 2;
+        int playerCenterY = (int) player.getY() + (int) player.getHeight() / 2;
+        String playerPos = playerCenterX + "," + playerCenterY + " - (" + playerCenterX/8 + "," + playerCenterY/8 + ")";
+        int health = (int) player.getHealth();
+        int speed = (int) player.getSpeed();
+        int strength = (int) player.getStrength();
+        int attackRange = (int) player.getAttackRange();
+        
+        Font.render(g, "fps: " + handler.getFPS() + " tps: " + handler.getTPS() + " - show/hide debug: F3", 0, 0, 2, false);
+        Font.render(g, playerPos, 0, 1*4, 2, false);
+        
+        Font.render(g, "health: " + health, 0, handler.getHeight() - 3*4, 2, false);
+        Font.render(g, "speed: " + speed, 0, handler.getHeight() - 2*4, 2, false);
+        Font.render(g, "attack: " + strength + "(r2: " + attackRange + ")", 0, handler.getHeight() - 1*4, 2, false);
+        
     }
     
     public Tile getTile(int x, int y) {
@@ -95,6 +144,10 @@ public class World {
     
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+    
+    public ItemManager getItemManager() {
+        return itemManager;
     }
     
 }
