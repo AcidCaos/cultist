@@ -5,7 +5,8 @@ import cultist.entities.Entity;
 import cultist.gfx.Animation;
 import cultist.gfx.Assets;
 import cultist.inventory.Inventory;
-import cultist.states.Screen;
+import cultist.screen.Screen;
+import cultist.sound.Sound;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -37,6 +38,8 @@ public class Player extends Creature{
         rightAnim = new Animation(500, Assets.player_right);
         
         inventory = new Inventory(handler);
+        
+        strength = 4;
     }
     
     @Override

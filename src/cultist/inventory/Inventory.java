@@ -1,7 +1,10 @@
 package cultist.inventory;
 
 import cultist.Handler;
+import cultist.gfx.Assets;
+import cultist.gfx.Font;
 import cultist.items.Item;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -14,17 +17,28 @@ public class Inventory {
     public Inventory (Handler handler) {
         this.handler = handler;
         inventoryItems = new ArrayList<>();
+        
+        // Testing inventory
+        addItem(new Item (Assets.yellow_book, "Book1", 255));
+        addItem(new Item (Assets.yellow_book, "Book2", 254));
+        addItem(new Item (Assets.yellow_book, "Book3", 253));
     }
     
     public void tick(){
         if (!show) return;
-        System.out.println("INVENTORY: ");
-        for (Item i : inventoryItems)
-            System.out.println("> " + i.getName() + " " + i.getCount());
     }
     
     public void render(Graphics g){
         if (!show) return;
+        
+        int centerX = handler.getWidth() / 2;
+        int centerY = handler.getHeight() / 2;
+        g.setColor(Color.black);
+        g.fillRect(centerX, 0, handler.getWidth(), 8*3);
+        Font.render(g, "Inventory", centerX, 0, 1, false);
+        for (int i=0; i<inventoryItems.size(); i++)
+            Font.render(g, "> " + inventoryItems.get(i).getName() + " " + inventoryItems.get(i).getCount(), 
+                        centerX + centerX / 2, 8+4*i, 2, true);
         
     }
     

@@ -1,16 +1,13 @@
 package cultist;
 
 import cultist.display.Display;
-import cultist.entities.Entity;
-import cultist.entities.creatures.Player;
 import cultist.gfx.Assets;
 import cultist.gfx.Camera;
-import cultist.gfx.Font;
 import cultist.input.InputHandler;
-import cultist.states.EscapeScreen;
-import cultist.states.GameScreen;
-import cultist.states.HomeScreen;
-import cultist.states.Screen;
+import cultist.screen.EscapeScreen;
+import cultist.screen.GameScreen;
+import cultist.screen.HomeScreen;
+import cultist.screen.Screen;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 

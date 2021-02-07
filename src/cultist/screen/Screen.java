@@ -1,4 +1,4 @@
-package cultist.states;
+package cultist.screen;
 
 import cultist.Handler;
 import java.awt.Graphics;

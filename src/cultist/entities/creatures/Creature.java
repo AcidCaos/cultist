@@ -16,8 +16,8 @@ public abstract class Creature extends Entity{
     protected float xMove, yMove;
     
     // Attack
-    private int attackRange = 8;
-    private int strength = 3;
+    protected int attackRange = 8;
+    protected int strength = 3;
     
     public Creature(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
