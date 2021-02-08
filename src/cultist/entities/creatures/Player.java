@@ -32,10 +32,12 @@ public class Player extends Creature{
         hitbox.width = 6;
         hitbox.height = 8;
         
-        downAnim = new Animation(500, Assets.player_down);
-        upAnim = new Animation(500, Assets.player_up);
-        leftAnim = new Animation(500, Assets.player_left);
-        rightAnim = new Animation(500, Assets.player_right);
+        int animVel = 150;
+        
+        downAnim = new Animation(animVel, Assets.player_down);
+        upAnim = new Animation(animVel, Assets.player_up);
+        leftAnim = new Animation(animVel, Assets.player_left);
+        rightAnim = new Animation(animVel, Assets.player_right);
         
         inventory = new Inventory(handler);
         

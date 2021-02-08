@@ -43,19 +43,19 @@ public class Assets {
         
         // Animations
         
-        player_down  = new BufferedImage[2];
-        player_up    = new BufferedImage[2];
-        player_left  = new BufferedImage[2];
-        player_right = new BufferedImage[2];
+        player_down  = new BufferedImage[4];
+        player_up    = new BufferedImage[4];
+        player_left  = new BufferedImage[4];
+        player_right = new BufferedImage[4];
         
-        player_down[0] = sheet.crop(0,0, 1,1);
-        player_down[1] = sheet.crop(0,1, 1,1);
-        player_up[0] = sheet.crop(1,0, 1,1);
-        player_up[1] = sheet.crop(1,1, 1,1);
-        player_left[0] = sheet.crop(3,0, 1,1);
-        player_left[1] = sheet.crop(3,1, 1,1);
-        player_right[0] = sheet.crop(2,0, 1,1);
-        player_right[1] = sheet.crop(2,1, 1,1);
+        for (int i = 0; i < 4; i++)
+            player_down[i] = sheet.crop(i, 0, 1,1);
+        for (int i = 0; i < 4; i++)
+            player_right[i] = sheet.crop(i, 1, 1,1);
+        for (int i = 0; i < 4; i++)
+            player_left[i] = sheet.crop(i, 2, 1,1);
+        for (int i = 0; i < 4; i++)
+            player_up[i] = sheet.crop(i, 3, 1,1);
         
         // Tiles
         

@@ -31,10 +31,6 @@ public class World {
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
         itemManager = new ItemManager(handler);
         
-        // Temporary entity adds -> Should go to loadWorld()
-        entityManager.addEntity(new Tree(handler, 8*4, 8*2));
-        entityManager.addEntity(new Rock(handler, 8*3, 8*5));
-        
         loadWorld(path);
         
         entityManager.getPlayer().setX(spawnX);
@@ -108,7 +104,7 @@ public class World {
         return t;
     }
     
-    private void loadWorld(String path) {
+    private void loadWorldOld(String path) {
         
         String file = Utils.loadFileNoIntro(path);
         String[] parts = file.split("\\s+");
@@ -124,6 +120,52 @@ public class World {
             for (int x = 0; x < getWidth(); x++) {
                 tile_ids[x][y] = Integer.parseInt(parts[ 4 + (x + y * getWidth())]);
             }
+    }
+    
+    private void loadWorld(String path) {
+        
+        String file = Utils.loadFileNoIntro(path);
+        
+        String[] section = file.split(";\\s*\\[[a-zA-Z\\s]*\\]\\s*");
+        System.out.println("Section len = " + section.length);
+        String map_size = section[1];
+        String player_spawn = section[2];
+        String tiles = section[3];
+        String entities = section[4];
+        // String items = section[5];
+        
+        for (int i = 0; i < section.length; i++)
+            System.out.println("==" + i +"============\n" + section[i]);
+        
+        // MAP SIZE
+        String[] aux = map_size.split("\\s+");
+        setWidth(Integer.parseInt(aux[0]));
+        setHeight(Integer.parseInt(aux[1]));
+        
+        // PLAYER SPAWN
+        aux = player_spawn.split("\\s+");
+        spawnX = Integer.parseInt(aux[0]);
+        spawnY = Integer.parseInt(aux[1]);
+        
+        // TILES
+        tile_ids = new int[getWidth()][getHeight()];
+        String[] array_ids = tiles.split("\\s+");
+        for (int y = 0; y < getHeight(); y++)
+            for (int x = 0; x < getWidth(); x++) {
+                tile_ids[x][y] = Integer.parseInt(array_ids[(x + y * getWidth())]);
+            }
+        
+        // ENTITIES
+        String[] entity = entities.split("\\s+;\\s+");
+        for (int i = 0; i < entity.length; i++) {
+            String[] split = entity[i].split("\\s+");
+            int x = Integer.parseInt(split[0]);
+            int y = Integer.parseInt(split[1]);
+            String ent = split[2];
+            if (ent.equals("tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y));
+        }
+        
+        // ITEMS
     }
 
     public int getWidth() {
