@@ -22,6 +22,8 @@
 # virtual machine crash logs
 hs_err_pid*
 
-/build/
-/dist/
-/nbproject/private/
+/build/*
+/dist/*
+/nbproject/*
+/build.xml
+/manifest.mf
