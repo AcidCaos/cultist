@@ -4,10 +4,13 @@ import cultist.display.Display;
 import cultist.gfx.Assets;
 import cultist.gfx.Camera;
 import cultist.input.InputHandler;
+import cultist.input.MouseHandler;
+import cultist.screen.EditorScreen;
 import cultist.screen.EscapeScreen;
 import cultist.screen.GameScreen;
 import cultist.screen.HomeScreen;
 import cultist.screen.Screen;
+import cultist.screen.StartScreen;
 import cultist.sound.Sound;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -31,12 +34,16 @@ public class Game implements Runnable {
     private BufferStrategy bs;
     private Graphics2D g;
     
-    public Screen gameScreen;
+    public Screen startScreen;
     public Screen homeScreen;
+    public Screen gameScreen;
     public Screen escapeScreen;
+    public Screen editorScreen;
     
     private Handler handler;
+    
     private InputHandler inputHandler;
+    private MouseHandler mouseHandler;
     
     private Camera camera;
     
@@ -53,18 +60,27 @@ public class Game implements Runnable {
     private void init() {
         handler = new Handler(this);
         inputHandler = new InputHandler(handler);
+        mouseHandler = new MouseHandler();
         
         display = new Display(title, CANVAS_WIDTH, CANVAS_HEIGHT);
         display.getFrame().addKeyListener(inputHandler);
         display.getCanvas().addKeyListener(inputHandler);
+        
+        display.getFrame().addMouseListener(mouseHandler);
+        display.getCanvas().addMouseListener(mouseHandler);
+        display.getFrame().addMouseMotionListener(mouseHandler);
+        display.getCanvas().addMouseMotionListener(mouseHandler);
+        
         Assets.init();
         
         camera = new Camera(handler, 0, 0);
         
+        editorScreen = new EditorScreen(handler);
+        startScreen = new StartScreen(handler);
         homeScreen = new HomeScreen(handler);
         gameScreen = new GameScreen(handler);
         escapeScreen = new EscapeScreen(handler);
-        Screen.setScreen(homeScreen);
+        Screen.setScreen(startScreen);
         
         Sound.load();
     }
@@ -163,8 +179,16 @@ public class Game implements Runnable {
         return INGAME_HEIGHT;
     }
     
+    public int getScale() {
+        return SCALE;
+    }
+    
     public InputHandler getInputHandler() {
         return inputHandler;
+    }
+    
+    public MouseHandler getMouseHandler() {
+        return mouseHandler;
     }
     
     public Camera getCamera() {

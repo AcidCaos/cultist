@@ -4,20 +4,17 @@ import cultist.Handler;
 import cultist.gfx.Font;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
-public class HomeScreen extends Screen {
+public class StartScreen extends Screen {
     
-    public HomeScreen(Handler handler){
+    public StartScreen(Handler handler){
         super(handler);
     }
 
     @Override
     public void tick() {
-        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_P))
-            Screen.setScreen(handler.getGame().gameScreen);
-        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_E))
-            Screen.setScreen(handler.getGame().editorScreen);
+        if (handler.getInputHandler().any_key)
+            Screen.setScreen(handler.getGame().homeScreen);
     }
 
     @Override
@@ -27,8 +24,8 @@ public class HomeScreen extends Screen {
         g.setColor(Color.black);
         g.fillRect(0, 0, handler.getWidth(), handler.getHeight());
         Font.render(g, "Cultist", centerX, centerY - 16, 1, true);
-        Font.render(g, "<p> to play", centerX, centerY + 8, 2, true);
-        Font.render(g, "<e> to open map Editor", centerX, centerY + 16, 2, true);
+        Font.render(g, "Press any key", centerX, centerY + 8, 1, true);
+        Font.render(g, "to start", centerX, centerY + 16, 1, true);
         Font.render(g, "(c) AcidCaos 2021", centerX, handler.getHeight() - 8, 2, true);
     }
 }

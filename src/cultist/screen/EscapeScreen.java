@@ -16,6 +16,8 @@ public class EscapeScreen extends Screen {
     public void tick() {
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE))
             Screen.setScreen(handler.getGame().gameScreen);
+        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_Q))
+            Screen.setScreen(handler.getGame().homeScreen);
     }
 
     @Override
@@ -25,6 +27,7 @@ public class EscapeScreen extends Screen {
         g.setColor(Color.black);
         g.fillRect(0, 0, handler.getWidth(), handler.getHeight());
         Font.render(g, "Escape Menu", centerX, centerY - 16, 1, true);
-        Font.render(g, "<esc> to return", centerX, centerY + 8, 2, true);
+        Font.render(g, "<esc> to return to game", centerX, centerY + 8, 2, true);
+        Font.render(g, "<q> to go to main screen", centerX, centerY + 16, 2, true);
     }
 }

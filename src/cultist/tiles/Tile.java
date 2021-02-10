@@ -50,4 +50,12 @@ public class Tile {
     public int getId(){
         return id;
     }
+    
+    public static Tile byId(int id){
+        return tiles[id];
+    }
+    
+    public static int getSize(){
+        return tiles.length;
+    }
 }

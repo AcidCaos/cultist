@@ -2,6 +2,7 @@ package cultist;
 
 import cultist.gfx.Camera;
 import cultist.input.InputHandler;
+import cultist.input.MouseHandler;
 import cultist.worlds.World;
 
 public class Handler {
@@ -45,6 +46,10 @@ public class Handler {
     
     public InputHandler getInputHandler() {
         return game.getInputHandler();
+    }
+    
+    public MouseHandler getMouseHandler() {
+        return game.getMouseHandler();
     }
     
     public int getFPS() {
