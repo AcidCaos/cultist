@@ -1,6 +1,7 @@
 package cultist.items;
 
 import cultist.Handler;
+import cultist.sound.Sound;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,8 +21,10 @@ public class ItemManager {
         while(it.hasNext()){
             Item i = it.next();
             i.tick();
-            if (i.getToPickUp())
+            if (i.getToPickUp()) {
+                Sound.pick_item.play();
                 it.remove();
+            }
         }
     }
     

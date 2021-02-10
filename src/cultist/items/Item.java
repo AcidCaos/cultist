@@ -14,7 +14,7 @@ public class Item {
     
     public static Item[] items = new Item[256];
     
-    public static Item yellowBook = new Item(Assets.yellow_book, "Book", 0);
+    public static Item woodLog = new Item(Assets.wood_log, "Log", 0);
     
     // Class
     

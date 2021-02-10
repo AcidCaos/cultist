@@ -1,5 +1,6 @@
 package cultist.tiles;
 
+import cultist.gfx.Assets;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -9,8 +10,13 @@ public class Tile {
     
     public static Tile[] tiles = new Tile[256];
     
-    public static Tile grass = new GrassTile(0);
-    public static Tile brick = new BrickTile(1);
+    public static Tile grass = new FloorTile(0, Assets.grass);
+    public static Tile red_grass = new FloorTile(1, Assets.red_grass);
+    public static Tile blue_grass = new FloorTile(2, Assets.blue_grass);
+    
+    public static Tile path = new FloorTile(5, Assets.grass);
+    
+    public static Tile brick = new SolidTile(10, Assets.bricks);
     
     // Class
     
@@ -20,9 +26,11 @@ public class Tile {
     protected BufferedImage texture;
     protected final int id;
     
-    public Tile(BufferedImage texture, int id) {
-        this.texture = texture;
+    public Tile(int id, BufferedImage texture) {
         this.id = id;
+        this.texture = texture;
+        
+        this.texture = texture;
         
         tiles[id] = this;
     }

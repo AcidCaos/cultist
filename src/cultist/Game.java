@@ -8,6 +8,7 @@ import cultist.screen.EscapeScreen;
 import cultist.screen.GameScreen;
 import cultist.screen.HomeScreen;
 import cultist.screen.Screen;
+import cultist.sound.Sound;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
@@ -64,6 +65,8 @@ public class Game implements Runnable {
         gameScreen = new GameScreen(handler);
         escapeScreen = new EscapeScreen(handler);
         Screen.setScreen(homeScreen);
+        
+        Sound.load();
     }
     
     private void tick() {

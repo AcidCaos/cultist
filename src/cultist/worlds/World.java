@@ -104,24 +104,6 @@ public class World {
         return t;
     }
     
-    private void loadWorldOld(String path) {
-        
-        String file = Utils.loadFileNoIntro(path);
-        String[] parts = file.split("\\s+");
-        
-        setWidth(Integer.parseInt(parts[0]));
-        setHeight(Integer.parseInt(parts[1]));
-        spawnX = Integer.parseInt(parts[2]);
-        spawnY = Integer.parseInt(parts[3]);
-        
-        tile_ids = new int[getWidth()][getHeight()];
-        
-        for (int y = 0; y < getHeight(); y++)
-            for (int x = 0; x < getWidth(); x++) {
-                tile_ids[x][y] = Integer.parseInt(parts[ 4 + (x + y * getWidth())]);
-            }
-    }
-    
     private void loadWorld(String path) {
         
         String file = Utils.loadFileNoIntro(path);
@@ -162,7 +144,9 @@ public class World {
             int x = Integer.parseInt(split[0]);
             int y = Integer.parseInt(split[1]);
             String ent = split[2];
-            if (ent.equals("tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y));
+            if      (ent.equals("tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, false));
+            else if (ent.equals("dead_tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, true));
+            else if (ent.equals("rock")) entityManager.addEntity(new Rock(handler, 8*x, 8*y));
         }
         
         // ITEMS

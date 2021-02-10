@@ -2,6 +2,7 @@ package cultist.entities;
 
 import cultist.Handler;
 import cultist.gfx.Font;
+import cultist.sound.Sound;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -42,7 +43,7 @@ public abstract class Entity {
     }
     
     public void renderEntityInfo(Graphics g) {
-        Font.render(g,"health: " + health,(int) (x + width - handler.getCamera().getxOffset()),(int) (y + height / 2 - handler.getCamera().getyOffset()),  2, false);
+        Font.render(g,"h: " + health,(int) (x + width - handler.getCamera().getxOffset()),(int) (y + height / 2 - handler.getCamera().getyOffset()),  2, false);
     }
 
     public abstract void interact();
@@ -51,6 +52,7 @@ public abstract class Entity {
     
     public void hurt(int amount){
         health -= amount;
+        Sound.hit_break.play();
         if (health <= 0) {
             exists = false;
             die();

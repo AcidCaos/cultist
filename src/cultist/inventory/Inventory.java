@@ -4,6 +4,7 @@ import cultist.Handler;
 import cultist.gfx.Assets;
 import cultist.gfx.Font;
 import cultist.items.Item;
+import cultist.sound.Sound;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -62,5 +63,6 @@ public class Inventory {
     
     public void setShown(boolean s) {
         this.show = s;
+        Sound.open_menu.play();
     }
 }
