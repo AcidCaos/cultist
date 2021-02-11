@@ -2,22 +2,31 @@ package cultist.screen;
 
 import cultist.Handler;
 import cultist.gfx.Font;
+import cultist.screen.menu.Menu;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 public class EscapeScreen extends Screen {
-      
+    
+    Menu menu;
+    
     public EscapeScreen(Handler handler){
         super(handler);
+        menu = new Menu(handler, new String[]{"Return to game", "Go to main screen"});
     }
 
     @Override
     public void tick() {
-        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE))
+        menu.tick();
+        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE)) 
             Screen.setScreen(handler.getGame().gameScreen);
-        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_Q))
-            Screen.setScreen(handler.getGame().homeScreen);
+        else if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ENTER)) {
+            int index = menu.getIndex();
+            if (index == 0) Screen.setScreen(handler.getGame().gameScreen);
+            else if (index == 1) Screen.setScreen(handler.getGame().homeScreen);
+        }
+        
     }
 
     @Override
@@ -26,8 +35,9 @@ public class EscapeScreen extends Screen {
         int centerY = handler.getHeight() / 2;
         g.setColor(Color.black);
         g.fillRect(0, 0, handler.getWidth(), handler.getHeight());
-        Font.render(g, "Escape Menu", centerX, centerY - 16, 1, true);
-        Font.render(g, "<esc> to return to game", centerX, centerY + 8, 2, true);
-        Font.render(g, "<q> to go to main screen", centerX, centerY + 16, 2, true);
+        Font.render(g, "Escape Menu", centerX, centerY - 35, 1, true);
+        menu.render(g, centerX, centerY, 2, true);
+        //Font.render(g, "<esc> to return to game", centerX, centerY + 8, 2, true);
+        //Font.render(g, "<q> to go to main screen", centerX, centerY + 16, 2, true);
     }
 }

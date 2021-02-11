@@ -23,6 +23,13 @@ public abstract class StaticEntity extends Entity {
         return null;
     }
     
+    public static String getNameIDFromNameIDFromStaticEntity(StaticEntity ent){
+        if      (ent.getClass() == Rock.class) return "rock";
+        else if (ent.getClass() == Tree.class) { return ((Tree) ent).isDead() ? "dead_tree" : "tree";}
+        System.out.println("SHOULD NOT HAPPEN");
+        return null;
+    }
+    
     public static int getSize() {
         return static_entities_names.length;
     }

@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Editor {
     
@@ -53,7 +54,8 @@ public class Editor {
         this.handler = handler;
         
         type_placing = Place.TILE;
-        selected_tile_id = 1;
+        selected_tile_id = 0;
+        selected_staticEntity_id = 0;
         
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
         itemManager = new ItemManager(handler);
@@ -135,7 +137,7 @@ public class Editor {
     
     private void checkMouseButtonClicked() {
         if (handler.getMouseHandler().isLeftPressed()) {
-            
+            System.out.println("Left Click");
             if (type_placing == Place.TILE) {
                 Tile selectedTile = Tile.byId(selected_tile_id);
                 if (selectedTile != null) tile_ids[currentTileX][currentTileY] = selected_tile_id;
@@ -143,10 +145,21 @@ public class Editor {
             else if (type_placing == Place.STATIC_ENTITIES) {
                 String selectedName = StaticEntity.static_entities_names[selected_staticEntity_id];
                 StaticEntity entity = StaticEntity.getStaticEntityFromNameID(selectedName, currentTileX, currentTileY, handler);
+                int Xpos = currentTileX * Tile.TILEWIDTH;
+                int Ypos = currentTileY * Tile.TILEHEIGHT;
+                Iterator<Entity> it = entityManager.getEntities().iterator();
+                while(it.hasNext()){
+                    Entity e = it.next();
+                    if (e.getX() == Xpos && e.getY() == Ypos && e.getClass() == entity.getClass())
+                        it.remove();
+                }
                 entityManager.addEntity(entity);
             }
             else if (type_placing == Place.SPAWNPOINT) {
-                
+                spawnX = currentTileX * Tile.TILEWIDTH;
+                spawnY = currentTileY * Tile.TILEHEIGHT;
+                entityManager.getPlayer().setX(spawnX);
+                entityManager.getPlayer().setY(spawnY);
             }
             else if (type_placing == Place.CREATURES) {
                 
@@ -214,8 +227,12 @@ public class Editor {
             //Font.render(g, "name=" + selectedName, handler.getWidth() - 26, 14, 3, false);
             Font.render(g, selectedName, handler.getWidth() - 26, 14, 3, false);
         }
-        else if (type_placing == Place.SPAWNPOINT) {}
-        else if (type_placing == Place.CREATURES) {}
+        else if (type_placing == Place.SPAWNPOINT) {
+            Font.render(g, "Set spawn", handler.getWidth() - 26, 14, 3, false);
+        }
+        else if (type_placing == Place.CREATURES) {
+            // TODO
+        }
 
         // Bottom
         Font.render(g, "(" + current + ") T:tile E:entity P:spawn C:creature  ", 0, handler.getHeight() - 4, 2, false);
@@ -231,7 +248,7 @@ public class Editor {
     }
     
     private void loadWorld(String path) { // COPY OF loadWorld() in WORLD class. Should not be different
-        
+        this.mapPath = path;
         Object[] ret = Data.loadMap(path, handler);
         mapWidth = (int) ret[0];
         mapHeight = (int) ret[1];
@@ -244,10 +261,11 @@ public class Editor {
     }
     
     private void saveWorld() {
-        String savePath = mapPath + "-new.txt";
+        int random_int = (int)(Math.random() * (99999 - 10000 + 1) + 10000);
+        Data.renameFile(mapPath, mapPath + "-" + random_int + ".old");
         
         Object[] arg = new Object[]{mapWidth, mapHeight, spawnX, spawnY, tile_ids, entityManager.getEntities()};
-        Data.saveMap(savePath, arg);
+        Data.saveMap(mapPath, arg);
     }
 
     

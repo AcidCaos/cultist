@@ -2,9 +2,10 @@ package cultist.data;
 
 import cultist.Handler;
 import cultist.entities.Entity;
-import cultist.entities.statics.Rock;
+import cultist.entities.creatures.Player;
 import cultist.entities.statics.StaticEntity;
-import cultist.entities.statics.Tree;
+import cultist.tiles.Tile;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,9 +86,27 @@ public class Data {
         ArrayList<Entity> ENTITIES = (ArrayList<Entity>) param[5]; // Player is inside here. Should not be added in map save.
         
         String save = "";
-        
-        // TODO
-        
+        // map size
+        save += "; [map size]\n";
+        save += WIDTH + " " + HEIGHT + "\n";
+        // player spawn
+        save += "; [player spawn]\n";
+        save += SPAWN_X + " " + SPAWN_Y + "\n";
+        // tiles
+        save += "; [tiles]\n";
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                save += TILE_IDS[x][y] + " ";
+            }
+            save += "\n";
+        }
+        // entities
+        save += "; [entities]\n";
+        for ( Entity e : ENTITIES)
+            if (e.getClass() != Player.class)
+                save += (int) e.getX() / Tile.TILEWIDTH + " " + (int) e.getY() / Tile.TILEHEIGHT + " " + StaticEntity.getNameIDFromNameIDFromStaticEntity( (StaticEntity)e ) + " ;\n";
+        save += "; [items]\n";
+        saveFile(path, save);        
         System.out.println("Done.");
     }
     
@@ -101,5 +120,38 @@ public class Data {
         ret = ret.replace("\r", " ");
         return ret;
     }
-
+    
+    private static void saveFile (String path, String content) {
+        Path pa = Path.of(path);
+        try {
+            Files.writeString(pa, content);
+        } catch (IOException ex) {}
+    }
+    
+    public static boolean deleteFile(String file) {
+        File f = new File(file); 
+        return f.delete();
+    }
+    
+    public static boolean makeDir(String dir) {
+        File f = new File(dir);
+        return f.mkdir();
+    }
+    
+    public static boolean existsDir(String dir) {
+        File f = new File(dir);
+        return f.exists();
+    }
+    
+    public static boolean existsFile(String file) {
+        File f = new File(file);
+        return f.exists();
+    }
+    
+    public static boolean renameFile(String o, String n) {
+        File oldFile = new File(o);
+        File newFile = new File(n);
+        if (newFile.exists()) return false;
+        return oldFile.renameTo(newFile);
+    }
 }

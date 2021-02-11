@@ -20,6 +20,10 @@ public class Tree extends StaticEntity{
         hitbox.height = 4;
     }
     
+    public boolean isDead() {
+        return isDead;
+    }
+    
     @Override
     public void tick() {
         

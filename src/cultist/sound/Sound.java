@@ -11,6 +11,7 @@ public class Sound {
     public static final Sound pick_item = new Sound("/pick.wav");
     public static final Sound hit_break = new Sound("/break.wav");
     public static final Sound open_menu = new Sound("/pheew.wav");
+    public static final Sound menu_select = new Sound("/menu.wav");
     
     // To play
     //Sound.test.play();
@@ -28,7 +29,6 @@ public class Sound {
     }
 
     public void play() {
-        clip.play();
         new Thread() {
             public void run() {
                 clip.play();
