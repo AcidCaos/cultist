@@ -19,7 +19,7 @@ public class Item {
     // Class
     
     public static final int ITEMWIDTH = 8, ITEMHEIGHT = 8;
-    public static final int PICK_RADIUS = 5;
+    public static final int PICK_RADIUS = 8;
     
     protected Handler handler;
     protected BufferedImage texture;
@@ -39,7 +39,7 @@ public class Item {
         this.id = id;
         this.count = 1;
         
-        pickBounds = new Ellipse2D.Double((double) x, (double)y, (double) PICK_RADIUS, (double) PICK_RADIUS);
+        pickBounds = new Ellipse2D.Double((double) x + ITEMWIDTH / 2, (double) y + ITEMHEIGHT / 2, (double) PICK_RADIUS, (double) PICK_RADIUS);
         
         items[id] = this;
     }

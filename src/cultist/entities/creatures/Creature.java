@@ -3,13 +3,20 @@ package cultist.entities.creatures;
 import cultist.Handler;
 import cultist.entities.Entity;
 import cultist.tiles.Tile;
+import java.util.ArrayList;
 
 public abstract class Creature extends Entity{
     
+    // STATIC
     
     public static final float DEFAULT_SPEED = 2.0f;
     public static final int DEFAULT_WIDTH = 8;
     public static final int DEFAULT_HEIGHT = 8;
+    
+    public static final ArrayList<Creature> creatures = new ArrayList<>();
+    //creatures.add();
+    
+    // CLASS
     
     // Movement
     protected float speed;

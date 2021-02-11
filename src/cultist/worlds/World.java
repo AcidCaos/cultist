@@ -1,6 +1,7 @@
 package cultist.worlds;
 
 import cultist.Handler;
+import cultist.data.Data;
 import cultist.entities.Entity;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
@@ -12,6 +13,7 @@ import cultist.items.ItemManager;
 import cultist.tiles.Tile;
 import cultist.utils.Utils;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class World {
     
@@ -41,6 +43,7 @@ public class World {
     public void tick() {
         itemManager.tick();
         entityManager.tick();
+        handler.getGame().getCamera().centerOnEntity(entityManager.getPlayer());
     }
     
     public void render(Graphics g) {
@@ -106,6 +109,19 @@ public class World {
     
     private void loadWorld(String path) {
         
+        Object[] ret = Data.loadMap(path, handler);
+        width = (int) ret[0];
+        height = (int) ret[1];
+        spawnX = (int) ret[2];
+        spawnY = (int) ret[3];
+        tile_ids = (int[][]) ret[4];
+        entityManager.setEntities( (ArrayList<Entity>) ret[5]);
+        entityManager.addEntity(entityManager.getPlayer()); // The player is also an entity: must be added, or won't be ticked nor rendered
+        
+        System.out.println("spawn " + spawnX + " " + spawnY);
+        
+        /* OLD CODE: (now is in 'Data'. Used in both World and Editor classes)
+        
         String file = Utils.loadFileNoIntro(path);
         
         String[] section = file.split(";\\s*\\[[a-zA-Z\\s]*\\]\\s*");
@@ -149,7 +165,7 @@ public class World {
             else if (ent.equals("rock")) entityManager.addEntity(new Rock(handler, 8*x, 8*y));
         }
         
-        // ITEMS
+        // ITEMS*/
     }
 
     public int getWidth() {

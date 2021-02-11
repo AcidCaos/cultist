@@ -9,5 +9,21 @@ public abstract class StaticEntity extends Entity {
         super(handler, x, y, width, height);
     }
     
+    public static String[] static_entities_names = {
+        "tree", 
+        "dead_tree",
+        "rock"
+    };
     
+    public static StaticEntity getStaticEntityFromNameID(String ent, int x, int y, Handler handler){
+        if      (ent.equals("tree")) return new Tree(handler, 8*x, 8*y, false);
+        else if (ent.equals("dead_tree")) return new Tree(handler, 8*x, 8*y, true);
+        else if (ent.equals("rock")) return new Rock(handler, 8*x, 8*y);
+        System.out.println("SHOULD NOT HAPPEN. ent= " + ent);
+        return null;
+    }
+    
+    public static int getSize() {
+        return static_entities_names.length;
+    }
 }

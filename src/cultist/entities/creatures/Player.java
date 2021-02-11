@@ -74,7 +74,7 @@ public class Player extends Creature{
         // Move
         getKeyboardMovement();
         move();
-        handler.getGame().getCamera().centerOnEntity(this);
+        // handler.getGame().getCamera().centerOnEntity(this);
         
         // Attack
         getKeyboardAttack();

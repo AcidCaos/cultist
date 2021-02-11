@@ -13,7 +13,6 @@ public class EditorScreen extends Screen {
         
         editor = new Editor(handler, "res/maps/map.txt");
         
-        //handler.setWorld(editor);
     }
 
     @Override

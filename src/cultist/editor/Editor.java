@@ -1,9 +1,12 @@
 package cultist.editor;
 
 import cultist.Handler;
+import cultist.data.Data;
+import cultist.entities.Entity;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
 import cultist.entities.statics.Rock;
+import cultist.entities.statics.StaticEntity;
 import cultist.entities.statics.Tree;
 import cultist.gfx.Font;
 import cultist.items.ItemManager;
@@ -13,6 +16,7 @@ import cultist.utils.Utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Editor {
     
@@ -34,7 +38,10 @@ public class Editor {
     // Selectors
     enum Place {TILE, STATIC_ENTITIES, CREATURES, SPAWNPOINT}
     Place type_placing;
+    
+    // Selected elements
     int selected_tile_id;
+    int selected_staticEntity_id;
     
     // EDITOR
     
@@ -61,7 +68,9 @@ public class Editor {
     public void tick() {
                 
         // itemManager.tick();
-        // entityManager.tick();
+        entityManager.tick(); // Otherwise it won't z-order for proper depth render
+        entityManager.getPlayer().setX(spawnX); // But then the player can move...
+        entityManager.getPlayer().setY(spawnY); // Reset to spawn position
         
         float yOffset = handler.getGame().getCamera().getyOffset();
         float xOffset = handler.getGame().getCamera().getxOffset();
@@ -84,13 +93,13 @@ public class Editor {
         
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ADD) || handler.getInputHandler().keyJustPressed(KeyEvent.VK_RIGHT)){
             if      (type_placing == Place.TILE) selected_tile_id = (selected_tile_id + 1) % Tile.getSize(); // Tile.getSize() = 256
-            else if (type_placing == Place.STATIC_ENTITIES) ;
+            else if (type_placing == Place.STATIC_ENTITIES) selected_staticEntity_id = (selected_staticEntity_id + 1) % StaticEntity.getSize();
             else if (type_placing == Place.SPAWNPOINT) ;
             else if (type_placing == Place.CREATURES) ;
         }
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_SUBTRACT) || handler.getInputHandler().keyJustPressed(KeyEvent.VK_LEFT)){
             if      (type_placing == Place.TILE) selected_tile_id = (selected_tile_id + Tile.getSize() - 1) % Tile.getSize();
-            else if (type_placing == Place.STATIC_ENTITIES) ;
+            else if (type_placing == Place.STATIC_ENTITIES) selected_staticEntity_id = (selected_staticEntity_id + StaticEntity.getSize() - 1) % StaticEntity.getSize();
             else if (type_placing == Place.SPAWNPOINT) ;
             else if (type_placing == Place.CREATURES) ;
         }
@@ -132,7 +141,9 @@ public class Editor {
                 if (selectedTile != null) tile_ids[currentTileX][currentTileY] = selected_tile_id;
             }
             else if (type_placing == Place.STATIC_ENTITIES) {
-                
+                String selectedName = StaticEntity.static_entities_names[selected_staticEntity_id];
+                StaticEntity entity = StaticEntity.getStaticEntityFromNameID(selectedName, currentTileX, currentTileY, handler);
+                entityManager.addEntity(entity);
             }
             else if (type_placing == Place.SPAWNPOINT) {
                 
@@ -196,12 +207,17 @@ public class Editor {
             else Font.render(g, "?", handler.getWidth() - 10, 3, 1, false);
             Font.render(g, "id=" + selected_tile_id, handler.getWidth() - 26, 14, 3, false);
         }
-        else if (type_placing == Place.STATIC_ENTITIES) {}
+        else if (type_placing == Place.STATIC_ENTITIES) {
+            String selectedName = StaticEntity.static_entities_names[selected_staticEntity_id];
+            //StaticEntity entity = StaticEntity.getStaticEntityFromNameID(selectedName, handler.getWidth() - 10, 3, handler);
+            //entity.render(g);
+            //Font.render(g, "name=" + selectedName, handler.getWidth() - 26, 14, 3, false);
+            Font.render(g, selectedName, handler.getWidth() - 26, 14, 3, false);
+        }
         else if (type_placing == Place.SPAWNPOINT) {}
         else if (type_placing == Place.CREATURES) {}
 
         // Bottom
-        
         Font.render(g, "(" + current + ") T:tile E:entity P:spawn C:creature  ", 0, handler.getHeight() - 4, 2, false);
         
         
@@ -214,60 +230,24 @@ public class Editor {
         return t;
     }
     
-    private void loadWorld(String path) {
+    private void loadWorld(String path) { // COPY OF loadWorld() in WORLD class. Should not be different
         
-        System.out.print("Loading map from file : " + path + " ... ");
+        Object[] ret = Data.loadMap(path, handler);
+        mapWidth = (int) ret[0];
+        mapHeight = (int) ret[1];
+        spawnX = (int) ret[2];
+        spawnY = (int) ret[3];
+        tile_ids = (int[][]) ret[4];
+        entityManager.setEntities( (ArrayList<Entity>) ret[5]);
+        entityManager.addEntity(entityManager.getPlayer()); // The player is also an entity: must be added, or won't be ticked nor rendered
         
-        String file = Utils.loadFileNoIntro(path);
-        
-        String[] section = file.split(";\\s*\\[[a-zA-Z\\s]*\\]\\s*");
-        System.out.println("Section len = " + section.length);
-        String map_size = section[1];
-        String player_spawn = section[2];
-        String tiles = section[3];
-        String entities = section[4];
-        // String items = section[5];
-        
-        for (int i = 0; i < section.length; i++)
-            System.out.println("==" + i +"============\n" + section[i]);
-        
-        // MAP SIZE
-        String[] aux = map_size.split("\\s+");
-        setWidth(Integer.parseInt(aux[0]));
-        setHeight(Integer.parseInt(aux[1]));
-        
-        // PLAYER SPAWN
-        aux = player_spawn.split("\\s+");
-        spawnX = Integer.parseInt(aux[0]);
-        spawnY = Integer.parseInt(aux[1]);
-        
-        // TILES
-        tile_ids = new int[getWidth()][getHeight()];
-        String[] array_ids = tiles.split("\\s+");
-        for (int y = 0; y < getHeight(); y++)
-            for (int x = 0; x < getWidth(); x++) {
-                tile_ids[x][y] = Integer.parseInt(array_ids[(x + y * getWidth())]);
-            }
-        
-        // ENTITIES
-        String[] entity = entities.split("\\s+;\\s+");
-        for (int i = 0; i < entity.length; i++) {
-            String[] split = entity[i].split("\\s+");
-            int x = Integer.parseInt(split[0]);
-            int y = Integer.parseInt(split[1]);
-            String ent = split[2];
-            if      (ent.equals("tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, false));
-            else if (ent.equals("dead_tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, true));
-            else if (ent.equals("rock")) entityManager.addEntity(new Rock(handler, 8*x, 8*y));
-        }
-        
-        System.out.println("Done.");
     }
     
     private void saveWorld() {
-        String savePath = "new-" + mapPath;
-        System.out.print("Saving map to file : " + savePath + " ... ");
-        System.out.println("Done.");
+        String savePath = mapPath + "-new.txt";
+        
+        Object[] arg = new Object[]{mapWidth, mapHeight, spawnX, spawnY, tile_ids, entityManager.getEntities()};
+        Data.saveMap(savePath, arg);
     }
 
     
