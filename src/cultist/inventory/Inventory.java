@@ -20,9 +20,9 @@ public class Inventory {
         inventoryItems = new ArrayList<>();
         
         // Testing inventory
-        addItem(new Item (Assets.yellow_book, "Book1", 255));
-        addItem(new Item (Assets.yellow_book, "Book2", 254));
-        addItem(new Item (Assets.yellow_book, "Book3", 253));
+        //addItem(new Item (Assets.yellow_book, "Book1", 255));
+        //addItem(new Item (Assets.yellow_book, "Book2", 254));
+        //addItem(new Item (Assets.yellow_book, "Book3", 253));
     }
     
     public void tick(){
@@ -55,6 +55,17 @@ public class Inventory {
         inventoryItems.add(item);
     }
     
+    public void addItem(int id, int quantity) {
+        for(Item i : inventoryItems){
+            if(i.getId() == id) {
+                i.setCount(i.getCount() + quantity);
+                return;
+            }
+        }
+        Item item = Item.items[id].createNew();
+        inventoryItems.add(item);
+    }
+    
     // Open close inventory
     
     public boolean getShown() {
@@ -64,5 +75,13 @@ public class Inventory {
     public void setShown(boolean s) {
         this.show = s;
         Sound.open_menu.play();
+    }
+    
+    public ArrayList<Item> getInventoryItems() {
+        return inventoryItems;
+    }
+    
+    public void setInventoryItems(ArrayList<Item> inventory_items) {
+        this.inventoryItems = inventoryItems;
     }
 }

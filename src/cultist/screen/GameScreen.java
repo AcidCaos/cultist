@@ -35,4 +35,8 @@ public class GameScreen extends Screen {
     public void render(Graphics g) {
         world.render(g);
     }
+    
+    public World getWorld() {
+        return world;
+    }
 }

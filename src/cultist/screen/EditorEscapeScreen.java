@@ -7,30 +7,30 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-public class EscapeScreen extends Screen {
+public class EditorEscapeScreen extends Screen {
     
     Menu menu;
     
-    public EscapeScreen(Handler handler){
+    public EditorEscapeScreen(Handler handler){
         super(handler);
-        menu = new Menu(handler, new String[]{"Return to game", "Save game", "Save and Exit", "Exit"});
+        menu = new Menu(handler, new String[]{"Return to edit", "Save map", "Save and Exit", "Exit"});
     }
 
     @Override
     public void tick() {
         menu.tick();
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE)) 
-            Screen.setScreen(handler.getGame().gameScreen);
+            Screen.setScreen(handler.getGame().editorScreen);
         else if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ENTER)) {
             int index = menu.getIndex();
             if      (index == 0) 
-                Screen.setScreen(handler.getGame().gameScreen);
+                Screen.setScreen(handler.getGame().editorScreen);
             else if (index == 1) {
-                saveGame();
-                Screen.setScreen(handler.getGame().gameScreen);
+                saveMap();
+                Screen.setScreen(handler.getGame().editorScreen);
             }
             else if (index == 2) {
-                saveGame();
+                saveMap();
                 Screen.setScreen(handler.getGame().homeScreen);
             }
             else if (index == 3) {
@@ -38,10 +38,11 @@ public class EscapeScreen extends Screen {
             }
             menu.reset();
         }
+        
     }
     
-    private void saveGame() {
-        handler.getWorld().saveProgress();
+    private void saveMap() {
+        ((EditorScreen) handler.getGame().editorScreen).getEditor().saveMap();
     }
 
     @Override
@@ -50,7 +51,7 @@ public class EscapeScreen extends Screen {
         int centerY = handler.getHeight() / 2;
         g.setColor(Color.black);
         g.fillRect(0, 0, handler.getWidth(), handler.getHeight());
-        Font.render(g, "Escape Menu", centerX, centerY - 35, 1, true);
+        Font.render(g, "Editor Escape Menu", centerX, centerY - 35, 1, true);
         menu.render(g, centerX, centerY, 2, true);
         //Font.render(g, "<esc> to return to game", centerX, centerY + 8, 2, true);
         //Font.render(g, "<q> to go to main screen", centerX, centerY + 16, 2, true);

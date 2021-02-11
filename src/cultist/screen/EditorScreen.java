@@ -7,11 +7,12 @@ import java.awt.Graphics;
 public class EditorScreen extends Screen {
     
     private Editor editor;
+    private String mapPath = "res/maps/map.txt";
     
     public EditorScreen(Handler handler){
         super(handler);
         
-        editor = new Editor(handler, "res/maps/map.txt");
+        editor = new Editor(handler, mapPath);
         
     }
 
@@ -23,5 +24,9 @@ public class EditorScreen extends Screen {
     @Override
     public void render(Graphics g) {
         editor.render(g);
+    }
+    
+    public Editor getEditor(){
+        return editor;
     }
 }

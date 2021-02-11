@@ -12,6 +12,7 @@ public class Sound {
     public static final Sound hit_break = new Sound("/break.wav");
     public static final Sound open_menu = new Sound("/pheew.wav");
     public static final Sound menu_select = new Sound("/menu.wav");
+    public static final Sound nextScreen = new Sound("/screen.wav");
     
     // To play
     //Sound.test.play();

@@ -22,9 +22,15 @@ public class HomeScreen extends Screen {
 
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ENTER)){
             int index = menu.getIndex();
-            if      (index == 0) Screen.setScreen(handler.getGame().gameScreen);
-            else if (index == 1) Screen.setScreen(handler.getGame().editorScreen);
+            if      (index == 0) {
+                Screen.setScreen(handler.getGame().loadSavedGameScreen);
+            }
+            else if (index == 1) {
+                ( (EditorScreen) handler.getGame().editorScreen ).getEditor().loadMap();
+                Screen.setScreen(handler.getGame().editorScreen);
+            }
             else if (index == 2) System.exit(0);
+            menu.reset();
         }
     }
 

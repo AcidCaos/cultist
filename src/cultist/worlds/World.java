@@ -5,17 +5,20 @@ import cultist.data.Data;
 import cultist.entities.Entity;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
-import cultist.entities.statics.Rock;
-import cultist.entities.statics.Tree;
 import cultist.gfx.Font;
+import cultist.inventory.Inventory;
 import cultist.items.Item;
 import cultist.items.ItemManager;
 import cultist.tiles.Tile;
-import cultist.utils.Utils;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class World {
+    
+    // Map and savedGame
+    private String mapPath;
+    private String savePath;
+    
     
     private Handler handler;
     private int width, height;
@@ -30,14 +33,28 @@ public class World {
     
     public World(Handler handler, String path) {
         this.handler = handler;
+        this.mapPath = path;
+        
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
         itemManager = new ItemManager(handler);
         
-        loadWorld(path);
+        // loadMap();
         
+    }
+    
+    public void loadMap(){
+        loadWorldMap(mapPath);
         entityManager.getPlayer().setX(spawnX);
         entityManager.getPlayer().setY(spawnY);
-        
+    }
+    
+    public void loadProgress(String path){
+        this.savePath = path;
+        loadWorldProgress(path);
+    }
+    
+    public void saveProgress(){
+        saveWorldProgress(savePath);
     }
     
     public void tick() {
@@ -107,7 +124,7 @@ public class World {
         return t;
     }
     
-    private void loadWorld(String path) {
+    private void loadWorldMap(String path) {
         
         Object[] ret = Data.loadMap(path, handler);
         width = (int) ret[0];
@@ -118,54 +135,29 @@ public class World {
         entityManager.setEntities( (ArrayList<Entity>) ret[5]);
         entityManager.addEntity(entityManager.getPlayer()); // The player is also an entity: must be added, or won't be ticked nor rendered
         
-        System.out.println("spawn " + spawnX + " " + spawnY);
+        // OLD CODE: (now is in 'Data'. Used in both World and Editor classes)
+    }
+    
+    private void loadWorldProgress(String path){
+        Object[] ret = Data.loadProgress(path, handler);
         
-        /* OLD CODE: (now is in 'Data'. Used in both World and Editor classes)
+        Player player = (Player) ret[0];
+        ArrayList<Entity> entities = (ArrayList<Entity>) ret[1];
+        Inventory inventory = (Inventory) ret[2];
         
-        String file = Utils.loadFileNoIntro(path);
+        entityManager.setEntities(entities);
+        entityManager.setPlayer(player);
+        entityManager.addEntity(entityManager.getPlayer()); // The player is also an entity: must be added, or won't be ticked nor rendered
+        entityManager.getPlayer().setInventory(inventory);
         
-        String[] section = file.split(";\\s*\\[[a-zA-Z\\s]*\\]\\s*");
-        System.out.println("Section len = " + section.length);
-        String map_size = section[1];
-        String player_spawn = section[2];
-        String tiles = section[3];
-        String entities = section[4];
-        // String items = section[5];
+    }
+    
+    private void saveWorldProgress(String path){
+        int random_int = (int)(Math.random() * (99999 - 10000 + 1) + 10000);
+        Data.renameFile(path, path + "-" + random_int + ".old");
         
-        for (int i = 0; i < section.length; i++)
-            System.out.println("==" + i +"============\n" + section[i]);
-        
-        // MAP SIZE
-        String[] aux = map_size.split("\\s+");
-        setWidth(Integer.parseInt(aux[0]));
-        setHeight(Integer.parseInt(aux[1]));
-        
-        // PLAYER SPAWN
-        aux = player_spawn.split("\\s+");
-        spawnX = Integer.parseInt(aux[0]);
-        spawnY = Integer.parseInt(aux[1]);
-        
-        // TILES
-        tile_ids = new int[getWidth()][getHeight()];
-        String[] array_ids = tiles.split("\\s+");
-        for (int y = 0; y < getHeight(); y++)
-            for (int x = 0; x < getWidth(); x++) {
-                tile_ids[x][y] = Integer.parseInt(array_ids[(x + y * getWidth())]);
-            }
-        
-        // ENTITIES
-        String[] entity = entities.split("\\s+;\\s+");
-        for (int i = 0; i < entity.length; i++) {
-            String[] split = entity[i].split("\\s+");
-            int x = Integer.parseInt(split[0]);
-            int y = Integer.parseInt(split[1]);
-            String ent = split[2];
-            if      (ent.equals("tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, false));
-            else if (ent.equals("dead_tree")) entityManager.addEntity(new Tree(handler, 8*x, 8*y, true));
-            else if (ent.equals("rock")) entityManager.addEntity(new Rock(handler, 8*x, 8*y));
-        }
-        
-        // ITEMS*/
+        Object[] arg = new Object[]{entityManager.getPlayer(), entityManager.getEntities(), entityManager.getPlayer().getInventory().getInventoryItems()};
+        Data.saveProgress(path, arg);
     }
 
     public int getWidth() {

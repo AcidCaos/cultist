@@ -69,4 +69,8 @@ public class Menu {
         return index;
     }
     
+    public void reset() {
+        index = 0;
+    }
+    
 }

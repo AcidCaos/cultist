@@ -6,9 +6,11 @@ import cultist.gfx.Camera;
 import cultist.input.InputHandler;
 import cultist.input.MouseHandler;
 import cultist.screen.EditorScreen;
+import cultist.screen.EditorEscapeScreen;
 import cultist.screen.EscapeScreen;
 import cultist.screen.GameScreen;
 import cultist.screen.HomeScreen;
+import cultist.screen.LoadSavedGameScreen;
 import cultist.screen.Screen;
 import cultist.screen.StartScreen;
 import cultist.sound.Sound;
@@ -36,9 +38,12 @@ public class Game implements Runnable {
     
     public Screen startScreen;
     public Screen homeScreen;
+    public Screen loadSavedGameScreen;
     public Screen gameScreen;
     public Screen escapeScreen;
+    
     public Screen editorScreen;
+    public Screen editorEscapeScreen;
     
     private Handler handler;
     
@@ -75,11 +80,15 @@ public class Game implements Runnable {
         
         camera = new Camera(handler, 0, 0);
         
-        editorScreen = new EditorScreen(handler);
         startScreen = new StartScreen(handler);
         homeScreen = new HomeScreen(handler);
+        loadSavedGameScreen = new LoadSavedGameScreen(handler);
         gameScreen = new GameScreen(handler);
         escapeScreen = new EscapeScreen(handler);
+        
+        editorScreen = new EditorScreen(handler);
+        editorEscapeScreen = new EditorEscapeScreen(handler);
+        
         Screen.setScreen(startScreen);
         
         Sound.load();

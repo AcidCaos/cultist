@@ -1,6 +1,7 @@
 package cultist.screen;
 
 import cultist.Handler;
+import cultist.sound.Sound;
 import java.awt.Graphics;
 
 public abstract class Screen {
@@ -9,6 +10,11 @@ public abstract class Screen {
     private static Screen currentScreen = null;
     
     public static void setScreen(Screen state) {
+        currentScreen = state;
+    }
+    
+    public static void setScreen(Screen state, boolean sound) {
+        if (sound) Sound.nextScreen.play();
         currentScreen = state;
     }
     

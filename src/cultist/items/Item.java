@@ -83,6 +83,10 @@ public class Item {
         i.setPosition(x, y);
         return i;
     }
+    
+    public Item createNew() {
+        return createNew(0, 0);
+    }
 
     public Handler getHandler() {
         return handler;

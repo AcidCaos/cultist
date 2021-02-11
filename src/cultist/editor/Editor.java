@@ -5,14 +5,11 @@ import cultist.data.Data;
 import cultist.entities.Entity;
 import cultist.entities.EntityManager;
 import cultist.entities.creatures.Player;
-import cultist.entities.statics.Rock;
 import cultist.entities.statics.StaticEntity;
-import cultist.entities.statics.Tree;
 import cultist.gfx.Font;
 import cultist.items.ItemManager;
 import cultist.screen.Screen;
 import cultist.tiles.Tile;
-import cultist.utils.Utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -60,15 +57,23 @@ public class Editor {
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
         itemManager = new ItemManager(handler);
         
-        loadWorld(path);
+        /*loadWorld();    // Done on loadMap()
         
         entityManager.getPlayer().setX(spawnX);
-        entityManager.getPlayer().setY(spawnY);
+        entityManager.getPlayer().setY(spawnY);*/
         
     }
     
+    public void reset() {
+        handler.getGame().getCamera().setxOffset(0);
+        handler.getGame().getCamera().setyOffset(0);
+        type_placing = Place.TILE;
+        selected_tile_id = 0;
+        selected_staticEntity_id = 0;
+    }
+    
     public void tick() {
-                
+        
         // itemManager.tick();
         entityManager.tick(); // Otherwise it won't z-order for proper depth render
         entityManager.getPlayer().setX(spawnX); // But then the player can move...
@@ -128,8 +133,7 @@ public class Editor {
         // Check if Save button
         
         if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE)) {
-            saveWorld();
-            Screen.setScreen(handler.getGame().homeScreen);
+            Screen.setScreen(handler.getGame().editorEscapeScreen);
         }
         
         checkMouseButtonClicked();
@@ -247,9 +251,8 @@ public class Editor {
         return t;
     }
     
-    private void loadWorld(String path) { // COPY OF loadWorld() in WORLD class. Should not be different
-        this.mapPath = path;
-        Object[] ret = Data.loadMap(path, handler);
+    public void loadMap() { // COPY OF loadWorld() in WORLD class. Should not be different
+        Object[] ret = Data.loadMap(mapPath, handler);
         mapWidth = (int) ret[0];
         mapHeight = (int) ret[1];
         spawnX = (int) ret[2];
@@ -258,9 +261,15 @@ public class Editor {
         entityManager.setEntities( (ArrayList<Entity>) ret[5]);
         entityManager.addEntity(entityManager.getPlayer()); // The player is also an entity: must be added, or won't be ticked nor rendered
         
+        entityManager.getPlayer().setX(spawnX);
+        entityManager.getPlayer().setY(spawnY);
+        
+        
+        reset();
+        
     }
     
-    private void saveWorld() {
+    public void saveMap() {
         int random_int = (int)(Math.random() * (99999 - 10000 + 1) + 10000);
         Data.renameFile(mapPath, mapPath + "-" + random_int + ".old");
         
