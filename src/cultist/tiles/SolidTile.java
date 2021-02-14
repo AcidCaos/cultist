@@ -1,6 +1,5 @@
 package cultist.tiles;
 
-import cultist.gfx.Assets;
 import java.awt.image.BufferedImage;
 
 public class SolidTile extends Tile{

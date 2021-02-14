@@ -24,6 +24,7 @@ public class Item {
     protected Handler handler;
     protected BufferedImage texture;
     protected String name;
+    protected String message;
     protected final int id;
     
     protected Ellipse2D pickBounds; /*Rectangle*/
@@ -42,6 +43,11 @@ public class Item {
         pickBounds = new Ellipse2D.Double((double) x + ITEMWIDTH / 2, (double) y + ITEMHEIGHT / 2, (double) PICK_RADIUS, (double) PICK_RADIUS);
         
         items[id] = this;
+    }
+    
+    public Item (BufferedImage texture, String name, int id, String message) {
+        this(texture, name, id);
+        this.message = message;
     }
     
     public void tick() {

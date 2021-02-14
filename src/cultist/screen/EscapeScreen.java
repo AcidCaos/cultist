@@ -24,17 +24,17 @@ public class EscapeScreen extends Screen {
         else if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ENTER)) {
             int index = menu.getIndex();
             if      (index == 0) 
-                Screen.setScreen(handler.getGame().gameScreen);
+                Screen.setScreen(handler.getGame().gameScreen, true);
             else if (index == 1) {
                 saveGame();
-                Screen.setScreen(handler.getGame().gameScreen);
+                Screen.setScreen(handler.getGame().gameScreen, true);
             }
             else if (index == 2) {
                 saveGame();
-                Screen.setScreen(handler.getGame().homeScreen);
+                Screen.setScreen(handler.getGame().homeScreen, true);
             }
             else if (index == 3) {
-                Screen.setScreen(handler.getGame().homeScreen);
+                Screen.setScreen(handler.getGame().homeScreen, true);
             }
             menu.reset();
         }

@@ -63,17 +63,20 @@ public class InputHandler implements KeyListener {
     }
 
     public boolean keyJustPressed(int k) {
+        if (k >= keys.length) return false;
         return justPressed[k];
     }
     
     @Override
     public void keyPressed(KeyEvent k) {
+        if (k.getKeyCode() >= keys.length) return;
         any_key = true;
         keys[k.getKeyCode()] = true;
     }
 
     @Override
     public void keyReleased(KeyEvent k) {
+        if (k.getKeyCode() >= keys.length) return;
         any_key = false;
         keys[k.getKeyCode()] = false;
     }

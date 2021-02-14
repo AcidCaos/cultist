@@ -9,6 +9,7 @@ import cultist.gfx.Font;
 import cultist.inventory.Inventory;
 import cultist.items.Item;
 import cultist.items.ItemManager;
+import cultist.screen.frames.FrameManager;
 import cultist.tiles.Tile;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -58,8 +59,12 @@ public class World {
     }
     
     public void tick() {
+        Tile.tickTiles();
+        // Items
         itemManager.tick();
+        // Entities (including player)
         entityManager.tick();
+
         handler.getGame().getCamera().centerOnEntity(entityManager.getPlayer());
     }
     

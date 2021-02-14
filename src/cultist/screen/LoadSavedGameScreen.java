@@ -32,14 +32,14 @@ public class LoadSavedGameScreen extends Screen {
             if (index == 0){
                 ( (GameScreen) handler.getGame().gameScreen ).getWorld().loadMap();
                 ( (GameScreen) handler.getGame().gameScreen ).getWorld().loadProgress(savePath);
-                Screen.setScreen(handler.getGame().gameScreen);
+                Screen.setScreen(handler.getGame().gameScreen, true);
             }
             else if (index == 1){
                 ( (GameScreen) handler.getGame().gameScreen ).getWorld().loadMap();
-                Screen.setScreen(handler.getGame().gameScreen);
+                Screen.setScreen(handler.getGame().gameScreen, true);
             }
             else if (index == 2){
-                Screen.setScreen(handler.getGame().homeScreen);
+                Screen.setScreen(handler.getGame().homeScreen, true);
             }
             menu.reset();
         }

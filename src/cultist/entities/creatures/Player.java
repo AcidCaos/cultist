@@ -37,10 +37,10 @@ public class Player extends Creature{
     public Player(Handler handler, int x, int y) {
         super(handler, x, y, Creature.DEFAULT_WIDTH, Creature.DEFAULT_HEIGHT);
         
-        hitbox.x = 1;
-        hitbox.y = 0;
-        hitbox.width = 6;
-        hitbox.height = 8;
+        hitbox.x = 0;
+        hitbox.y = 5;
+        hitbox.width = 8;
+        hitbox.height = 3;
         
         downAnim = new Animation(walk_animVel, Assets.player_down);
         upAnim = new Animation(walk_animVel, Assets.player_up);
@@ -82,7 +82,7 @@ public class Player extends Creature{
         // Interact
         
         // Inventory
-        inventory.tick();
+        // inventory.tick();
     }
     
     public void getKeyboardAttack() {
@@ -100,6 +100,8 @@ public class Player extends Creature{
         if(handler.getInputHandler().attack){
             
             System.out.println("Attack Click");
+            
+            // Should check if the player is moving. Return otherwise. TODO 
             
             attackTimer = 0;
             showHitAnimation_flag = true;
@@ -130,6 +132,7 @@ public class Player extends Creature{
                 lastAttackDir = Dir.RIGHT;
             }
             else {
+                lastAttackDir = Dir.UP;
                 return; // not attacking
             }
             
@@ -158,7 +161,7 @@ public class Player extends Creature{
     public void render(Graphics g) {
         renderPlayerAnimation(g);
         renderHitAnimation(g);
-        inventory.render(g);
+        //inventory.render(g);
         
     }
     

@@ -130,12 +130,6 @@ public class Editor {
         if (currentTileX >= mapWidth) currentTileX = mapWidth - 1;
         if (currentTileY >= mapHeight) currentTileY = mapHeight - 1;
         
-        // Check if Save button
-        
-        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE)) {
-            Screen.setScreen(handler.getGame().editorEscapeScreen);
-        }
-        
         checkMouseButtonClicked();
     }
     

@@ -91,7 +91,7 @@ public class Game implements Runnable {
         
         Screen.setScreen(startScreen);
         
-        Sound.load();
+        Sound.init();
     }
     
     private void tick() {

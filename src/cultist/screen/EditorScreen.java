@@ -3,6 +3,7 @@ package cultist.screen;
 import cultist.Handler;
 import cultist.editor.Editor;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public class EditorScreen extends Screen {
     
@@ -18,6 +19,9 @@ public class EditorScreen extends Screen {
 
     @Override
     public void tick() {
+        if (handler.getInputHandler().keyJustPressed(KeyEvent.VK_ESCAPE)) {
+            Screen.setScreen(handler.getGame().editorEscapeScreen, true);
+        }
         editor.tick();
     }
 

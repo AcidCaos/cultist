@@ -17,8 +17,8 @@ public class EntityManager {
         public int compare(Entity a, Entity b) {
             // -1 : a before b
             // +1 : a after  b
-            if (a.getY() + a.getHeight() < b.getY() + b.getHeight()) return -1;
-            //if (a.getY() < b.getY()) return -1;
+            //if (a.getY() + a.getHeight() < b.getY() + b.getHeight()) return -1;
+            if (a.getY() < b.getY()) return -1;
             return +1;
         }
     };

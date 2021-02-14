@@ -41,7 +41,16 @@ public class Tree extends StaticEntity{
 
     @Override
     public void die() {
-        handler.getWorld().getItemManager().addItem(Item.woodLog.createNew((int)x, (int)y));
+        placeLog(-2 ,-6);
+        placeLog(8, -4);
+        placeLog(3, 0);
+        placeLog(-7, 2);
+        placeLog(-5, 6);
+        placeLog(5, 5);
+    }
+    
+    private void placeLog(int dx, int dy) {
+        handler.getWorld().getItemManager().addItem(Item.woodLog.createNew((int)x + dx, (int)y + dy));
     }
     
 }

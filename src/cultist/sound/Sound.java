@@ -26,7 +26,7 @@ public class Sound {
         System.out.println("Sound Loaded");
     }
     
-    public static void load() {
+    public static void init() {
     }
 
     public void play() {
